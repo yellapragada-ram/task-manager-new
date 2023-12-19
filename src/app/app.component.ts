@@ -12,7 +12,7 @@ export class AppComponent {
   setSelectedDate(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     this.selectedDate = inputElement.valueAsDate;
-  }
+  } 
 
   getDayFromDate(): number | null {
     return this.selectedDate ? this.selectedDate.getDay() : null;
