@@ -17,11 +17,9 @@
   </div>
 </div>
 
-
 <div class="days-container">
   <div *ngFor="let day of daysOfWeek; let i = index" [ngClass]="{ 'active': getDayFromDate() === i }" class="day-box">{{ day }}</div>
 </div>
-
 
 <div class="container" *ngIf="items.length > 0">
   <div
