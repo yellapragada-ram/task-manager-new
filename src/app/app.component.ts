@@ -35,7 +35,6 @@ export class AppComponent {
 
   setSelectedDate(event: Event) {
     const inputElement = event.target as HTMLInputElement;
-<<<<<<< HEAD
     this.selectedDate = new Date(inputElement.value);
   }
 
@@ -44,10 +43,8 @@ export class AppComponent {
     const dateInput = document.querySelector("input[type='date']");
     if (dateInput) dateInput.setAttribute('min', today);
   }
-=======
     this.selectedDate = inputElement.valueAsDate;
   } 
->>>>>>> origin/main
 
   getDayFromDate(): number | null {
     return this.selectedDate ? this.selectedDate.getDay() : null;
