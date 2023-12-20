@@ -1,11 +1,10 @@
-
 <div class="container">
   <div class="title-row">
     <div class="title-field">
-      <input type="text" placeholder="Title" [(ngModel)]="newItemTitle"/>
+      <input type="text" placeholder="Title" [(ngModel)]="newItemTitle" required/>
     </div>
     <div class="date-field">
-      <input type="date" style="width: 200px" (change)="setSelectedDate($event)" />
+      <input type="date" style="width: 200px" [min]="getCurrentDate()" [(ngModel)]="newItemDate" (change)="setSelectedDate($event)" />
     </div>
   </div>
   <div class="description-row">
@@ -13,21 +12,31 @@
       <textarea placeholder="Description" [(ngModel)]="newItemDescription"></textarea>
     </div>
     <div class="save-button">
-      <button style="width: 200px" (click)="addItem()">Save</button>
+      <button style="width: 200px" (click)="addItem()">{{ editMode ? 'Update' : 'Save' }}</button>
     </div>
   </div>
 </div>
+
 <div class="days-container">
   <div *ngFor="let day of daysOfWeek; let i = index" [ngClass]="{ 'active': getDayFromDate() === i }" class="day-box">{{ day }}</div>
 </div>
+
 <div class="container" *ngIf="items.length > 0">
-  <div class="description-row" *ngFor="let item of items; let i = index" class="item">
+  <div
+    *ngFor="let item of items; let i = index"
+    class="item"
+    draggable="true"
+    (dragstart)="onDragStart($event, i)"
+    (drop)="onDrop($event, i)"
+    (dragover)="allowDrop($event)"
+  >
     <div class="description-field">
       <h1 style="text-align: left">{{ item.title }}</h1>
       <h3 style="text-align: left">{{ item.description }}</h3>
     </div>
-    <div class="save-button">
-      <button style="width: 200px"(click)="deleteItem(i)">Delete</button>
+    <div class="edit-delete-buttons">
+      <button style="width: 100px" (click)="editItem(i)">Edit</button>
+      <button style="width: 100px" (click)="deleteItem(i)">Delete</button>
     </div>
   </div>
 </div>
