@@ -43,8 +43,6 @@ export class AppComponent {
     const dateInput = document.querySelector("input[type='date']");
     if (dateInput) dateInput.setAttribute('min', today);
   }
-    this.selectedDate = inputElement.valueAsDate;
-  } 
 
   getDayFromDate(): number | null {
     return this.selectedDate ? this.selectedDate.getDay() : null;
@@ -52,7 +50,7 @@ export class AppComponent {
 
   addItem() {
     if (this.newItemTitle) {
-      if (this.editMode && this.editedIndex !== null) {
+      if (this.editMode && this.editedIndex !== null && this.editedIndex >= 0 && this.editedIndex < this.items.length) {
         this.items[this.editedIndex] = {
           title: this.newItemTitle,
           description: this.newItemDescription,
@@ -84,21 +82,25 @@ export class AppComponent {
     this.newItemTitle = '';
     this.newItemDescription = '';
   }
-
   onDragStart(event: DragEvent, index: number) {
-    event.dataTransfer?.setData('text/plain', index.toString());
-  }
-
-  onDrop(event: DragEvent, index: number) {
-    event.preventDefault();
-    const initialIndex = parseInt(event.dataTransfer?.getData('text/plain') || '');
-    if (initialIndex !== index && initialIndex >= 0 && initialIndex < this.items.length) {
-      const item = this.items.splice(initialIndex, 1)[0];
-      this.items.splice(index, 0, item);
+    if (event.dataTransfer) {
+      event.dataTransfer.setData('text/plain', index.toString());
     }
   }
-
+  
+  onDrop(event: DragEvent, index: number) {
+    event.preventDefault();
+    if (event.dataTransfer) {
+      const initialIndex = parseInt(event.dataTransfer.getData('text/plain') || '', 10);
+      if (!isNaN(initialIndex) && initialIndex !== index && initialIndex >= 0 && initialIndex < this.items.length) {
+        const item = this.items.splice(initialIndex, 1)[0];
+        this.items.splice(index, 0, item);
+      }
+    }
+  }
+  
   allowDrop(event: DragEvent) {
     event.preventDefault();
   }
+  
 }
